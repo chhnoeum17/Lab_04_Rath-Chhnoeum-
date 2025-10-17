@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">CHHNOEUM</string>
+    <string name="title">Manage Your Expense, By CHHNOEUM</string>
+    <string name="last_expense">My last expense was 0</string>
+    <string name="add_new_expense">Add New Expense</string>
+    <string name="view_detail_expense">View Detail Expense</string>
+    <string name="amount">Amount</string>
+    <string name="remark">Remark</string>
+    <string name="created_date">Created Date (dd/MM/yyyy)</string>
+    <string name="add_expense">Add Expense</string>
+    <string name="back_to_home">Back to Home</string>
+    <string name="last_expense_message">My last expense was %1$s</string>
+
+    <!-- String for when no expense has been recorded yet -->
+    <string name="no_expense_recorded">My last expense was 0</string>
+    <string name="invalid_amount_error">Invalid amount recorded</string>
+
+    <string-array name="currencies">
+        <item>KHR</item>
+        <item>USD</item>
+        <item>THB</item>
+    </string-array>
+    <string-array name="categories">
+        <item>Food</item>
+        <item>Transport</item>
+        <item>Shopping</item>
+    </string-array>
+</resources>
