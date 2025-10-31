@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="tvLastExpense" type="id" />
+    <item name="btnViewDetail" type="id" />
+    <item name="btnAddNew" type="id" />
+</resources>

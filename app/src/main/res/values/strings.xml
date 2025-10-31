@@ -1,28 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">CHHNOEUM</string>
-    <string name="title">Manage Your Expense, By CHHNOEUM</string>
-    <string name="last_expense">My last expense was 0</string>
+    <string name="app_name">LabMAD2</string>
+
+    <string name="title">Expense Tracker</string>
+    <string name="last_expense">No expense yet</string>
     <string name="add_new_expense">Add New Expense</string>
-    <string name="view_detail_expense">View Detail Expense</string>
+    <string name="view_detail_expense">View Detail</string>
+    <string name="no_expense_recorded">No expense recorded</string>
+    <string name="last_expense_message">Last expense: %1$s</string>
+    <string name="invalid_amount_error">Invalid amount</string>
+
+    <string name="add_expense">Add Expense</string>
     <string name="amount">Amount</string>
     <string name="remark">Remark</string>
-    <string name="created_date">Created Date (dd/MM/yyyy)</string>
-    <string name="add_expense">Add Expense</string>
+    <string name="created_date">Date</string>
+    <string name="amount_error">Please enter an amount</string>
+    <string name="currency_error">Please select a currency</string>
+    <string name="category_error">Please select a category</string>
+    <string name="date_error">Please select a date</string>
+    <string name="lab4_no_save">No save needed for Lab 4</string>
+
     <string name="back_to_home">Back to Home</string>
-    <string name="last_expense_message">My last expense was %1$s</string>
+    <string name="expense_not_found">Expense not found</string>
+    <string name="welcome_to_home">Welcome to Home</string>
+    <string name="add">Add</string>
+    <string name="home">Home</string>
+    <string name="expenses">Expenses</string>
+    <string name="category_format">Category: %1$s</string>
+    <string name="date_format">Date: %1$s</string>
 
-    <!-- String for when no expense has been recorded yet -->
-    <string name="no_expense_recorded">My last expense was 0</string>
-    <string name="invalid_amount_error">Invalid amount recorded</string>
-
-    <string-array name="currencies">
-        <item>KHR</item>
-        <item>USD</item>
-        <item>THB</item>
-    </string-array>
-    <string-array name="categories">
-        <item>Food</item>
-        <item>Transport</item>
-        <item>Shopping</item>
-    </string-array>
 </resources>

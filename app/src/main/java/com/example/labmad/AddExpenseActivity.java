@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -95,9 +96,9 @@ public class AddExpenseActivity extends AppCompatActivity {
             String category = spCategory.getSelectedItem().toString();
             String remark = etRemark.getText().toString().trim();
 
-            Expense e = new Expense(amount, currency, category, remark, date);
+            Expense e = new ExpenseBuilder().setAmount(amount).setCurrency(currency).setCategory(category).setRemark(remark).setCreatedDate(date).createExpense();
             Intent result = new Intent();
-            result.putExtra(EXTRA_RESULT_EXPENSE, e);
+            result.putExtra(EXTRA_RESULT_EXPENSE, (Parcelable) e);
             setResult(Activity.RESULT_OK, result);
             finish();
         });

@@ -16,7 +16,7 @@
             android:id="@+id/imageView3"
             style="@style/App.ImageView"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/mylogo"
+            android:src="@drawable/ic_logo"
             android:layout_marginBottom="8dp" />
 
         <!-- Amount -->

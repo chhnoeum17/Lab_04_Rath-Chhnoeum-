@@ -1,0 +1,10 @@
+[versions]
+compileSdk = "36"
+targetSdk  = "36"
+minSdk     = "21"
+recyclerview = "1.4.0"
+fragmentKtx  = "1.8.9"   # latest per IDE suggestion
+
+[libraries]
+recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
+fragment-ktx = { module = "androidx.fragment:fragment-ktx",    version.ref = "fragmentKtx" }

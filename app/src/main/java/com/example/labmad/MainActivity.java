@@ -1,120 +1,105 @@
 package com.example.labmad;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
-import java.text.NumberFormat;
-import java.util.Currency;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String EXTRA_EXPENSE = "extra_expense";
-    private static final String STATE_LATEST_EXPENSE = "state_latest_expense";
-    private static final String TAG = "MainActivity";
+    private List<Expense> allExpenses;
 
-    private TextView tvLastExpense;
-    private Button btnViewDetail;
+    public List<Expense> getAllExpenses() {
+        if (allExpenses == null) {
+            allExpenses = ExpenseStorage.loadList(this);
+        }
+        return allExpenses;
+    }
 
-    private Expense latestExpense = null;
-
-    private final ActivityResultLauncher<Intent> addExpenseLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            // use lambda; annotate the single parameter to satisfy the non-null contract
-            (@NonNull ActivityResult result) -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Intent data = result.getData();
-                    if (data != null) {
-                        Expense returnedExpense; // don't initialize to null (redundant)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                            // API 33+ new signature
-                            returnedExpense = data.getParcelableExtra(AddExpenseActivity.EXTRA_RESULT_EXPENSE, Expense.class);
-                        } else {
-                            // older API: old signature
-                            returnedExpense = data.getParcelableExtra(AddExpenseActivity.EXTRA_RESULT_EXPENSE);
-                        }
-                        if (returnedExpense != null) {
-                            latestExpense = returnedExpense;
-                            updateUi();
-                        }
-                    }
-                }
-            });
+    public Expense getLatestExpense() {
+        if (allExpenses == null || allExpenses.isEmpty()) {
+            return null;
+        }
+        return allExpenses.get(0);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvLastExpense = findViewById(R.id.tvLastExpense);
-        btnViewDetail = findViewById(R.id.btnViewDetail);
-        Button btnAddNew = findViewById(R.id.btnAddNew);
+        // Initialize with sample data if storage is empty
+        ExpenseStorage.initializeWithSampleData(this);
+        allExpenses = ExpenseStorage.loadList(this);
 
-        if (savedInstanceState != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                latestExpense = savedInstanceState.getParcelable(STATE_LATEST_EXPENSE, Expense.class);
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+        FragmentManager fm = getSupportFragmentManager();
+
+        if (fm.findFragmentById(R.id.nav_host) == null) {
+            fm.beginTransaction()
+                    .replace(R.id.nav_host, createHomeFragment(getLatestExpense()))
+                    .commit();
+        }
+
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            Fragment f;
+
+            if (id == R.id.nav_add) {
+                f = new AddExpenseFragment();
+            } else if (id == R.id.nav_list) {
+                f = new ExpenseListFragment();
             } else {
-                latestExpense = savedInstanceState.getParcelable(STATE_LATEST_EXPENSE);
+                f = createHomeFragment(getLatestExpense());
             }
-        }
 
-        updateUi();
-
-        btnAddNew.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, AddExpenseActivity.class);
-            addExpenseLauncher.launch(intent);
-        });
-
-        btnViewDetail.setOnClickListener(v -> {
-            if (latestExpense != null) {
-                Intent intent = new Intent(MainActivity.this, ExpenseDetailActivity.class);
-                intent.putExtra(EXTRA_EXPENSE, latestExpense);
-                startActivity(intent);
-            }
+            fm.beginTransaction()
+                    .replace(R.id.nav_host, f)
+                    .commit();
+            return true;
         });
     }
 
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (latestExpense != null) {
-            outState.putParcelable(STATE_LATEST_EXPENSE, latestExpense);
+    public void addExpense(Expense expense) {
+        ExpenseStorage.addExpense(this, expense);
+        allExpenses = ExpenseStorage.loadList(this);
+        showHomeFragmentWithExpense(expense);
+        Toast.makeText(this, "Expense added", Toast.LENGTH_SHORT).show();
+
+        // Notify ExpenseListFragment if visible
+        Fragment current = getSupportFragmentManager().findFragmentById(R.id.nav_host);
+        if (current instanceof ExpenseListFragment) {
+            ((ExpenseListFragment) current).refreshList(allExpenses);
         }
     }
 
-    private void updateUi() {
-        if (latestExpense != null) {
-            NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
-            try {
-                currencyFormatter.setCurrency(Currency.getInstance(latestExpense.currency));
-            } catch (Exception e) {
-                Log.e(TAG, "Failed to set currency: " + latestExpense.currency, e);
-            }
+    public void navigateToAddExpense() {
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+        bottomNav.setSelectedItemId(R.id.nav_add);
+    }
 
-            try {
-                double amountValue = Double.parseDouble(String.valueOf(latestExpense.amount));
-                String formattedAmount = currencyFormatter.format(amountValue);
-                tvLastExpense.setText(getString(R.string.last_expense_message, formattedAmount));
-            } catch (NumberFormatException e) {
-                tvLastExpense.setText(R.string.invalid_amount_error);
-                Log.e(TAG, "Invalid amount for latestExpense: " + latestExpense.amount, e);
-            }
+    private void showHomeFragmentWithExpense(Expense e) {
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.nav_host, createHomeFragment(e))
+                .commit();
+    }
 
-            btnViewDetail.setEnabled(true);
-        } else {
-            tvLastExpense.setText(getString(R.string.no_expense_recorded));
-            btnViewDetail.setEnabled(false);
+    private Fragment createHomeFragment(@Nullable Expense e) {
+        HomeFragment hf = new HomeFragment();
+        if (e != null) {
+            Bundle args = new Bundle();
+            args.putParcelable("latest_expense", e);
+            hf.setArguments(args);
         }
+        return hf;
     }
 }

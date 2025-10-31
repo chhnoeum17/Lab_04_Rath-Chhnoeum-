@@ -3,35 +3,35 @@ package com.example.labmad;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Expense implements Parcelable {
-    public double amount;
-    public String currency;
-    public String category;
-    public String remark;
-    public String createdDate;
+import androidx.annotation.NonNull;
 
-    public Expense() {}
+import java.io.Serializable;
 
-    public Expense(double amount, String currency, String category, String remark, String date) {
+public class Expense implements Parcelable, Serializable {
+
+    public int id = 0;
+    public final String amount;
+    public final String currency;
+    public final String category;
+    public final String remark;
+    public final String createdDate;
+
+    public Expense(String amount,
+                   @NonNull String currency,
+                   @NonNull String category,
+                   @NonNull String remark,
+                   @NonNull String createdDate) {
         this.amount = amount;
         this.currency = currency;
         this.category = category;
         this.remark = remark;
-        this.createdDate = date;
-    }
-
-    protected Expense(Parcel in) {
-        amount = in.readDouble();
-        currency = in.readString();
-        category = in.readString();
-        remark = in.readString();
-        createdDate = in.readString();
+        this.createdDate = createdDate;
     }
 
     public static final Creator<Expense> CREATOR = new Creator<Expense>() {
         @Override
         public Expense createFromParcel(Parcel in) {
-            return new Expense(in);
+            return new ExpenseBuilder().setIn(in).createExpense();
         }
 
         @Override
@@ -46,11 +46,24 @@ public class Expense implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeDouble(amount);
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeDouble(Double.parseDouble(amount));
         dest.writeString(currency);
         dest.writeString(category);
         dest.writeString(remark);
         dest.writeString(createdDate);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Expense{id=" + id +
+                ", amount=" + amount +
+                ", currency='" + currency + '\'' +
+                ", category='" + category + '\'' +
+                ", remark='" + remark + '\'' +
+                ", createdDate='" + createdDate + '\'' +
+                '}';
     }
 }

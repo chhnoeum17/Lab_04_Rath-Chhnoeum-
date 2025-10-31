@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <color name="primary">#0D47A1</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="primary_600">#0D47A1</color>
+    <color name="card_bg">#FFFFFFFF</color>
+    <color name="text_primary">#000000</color>
+    <color name="stroke">#1F000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="green">#4CAF50</color>
+    <color name="black">#000000</color>
+    <color name="colorPrimary">#0D47A1</color> <!-- Deep blue -->
+    <color name="nav_background">#FFFFFFFF</color>
+
+
 </resources>

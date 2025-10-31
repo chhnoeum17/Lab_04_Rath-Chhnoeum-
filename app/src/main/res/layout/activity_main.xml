@@ -1,68 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
     tools:context=".MainActivity">
 
-    <androidx.cardview.widget.CardView
-        style="@style/App.CardView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <!-- Fragment host: leave room at bottom for the BottomNavigationView -->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host"
+        android:name="com.example.labmad.HomeFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:layout="@layout/fragment_home" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="16dp">
+    <!-- Bottom navigation anchored to bottom (drawn last so it is on top) -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg_bottom_nav"
+        app:labelVisibilityMode="labeled"
+        tools:ignore="SmallNavigationBar"
+        app:menu="@menu/menu_bottom_nav" />
 
-            <ImageView
-                android:id="@+id/imageView"
-                style="@style/App.ImageView"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/mylogo" />
-
-            <TextView
-                android:id="@+id/tvTitle"
-                style="@style/Info.Title"
-                android:layout_gravity="center"
-                android:text="@string/title"
-
-                android:layout_marginTop="8dp" />
-
-            <TextView
-                android:id="@+id/tvLastExpense"
-                style="@style/Info.Text"
-                android:text="@string/last_expense"
-                android:layout_marginTop="8dp" />
-
-            <Button
-                android:id="@+id/btnAddNew"
-                style="@style/App.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="200dp"
-                android:layout_marginTop="12dp"
-                android:backgroundTint="#0D47A1"
-                android:textColor="#FFFFFF"
-                android:text="@string/add_new_expense" />
-
-            <Button
-                android:id="@+id/btnViewDetail"
-                style="@style/App.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="200dp"
-                android:layout_marginTop="12dp"
-                android:backgroundTint="#0D47A1"
-                android:textColor="#FFFFFF"
-                android:text="@string/view_detail_expense" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

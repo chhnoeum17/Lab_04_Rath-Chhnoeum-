@@ -1,92 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
-    tools:context=".ExpenseDetailActivity">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
 
-    <androidx.cardview.widget.CardView
-        style="@style/App.CardView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <TextView
+        android:id="@+id/tvAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fillViewport="true">
+    <TextView
+        android:id="@+id/tvCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="16dp">
+    <TextView
+        android:id="@+id/tvRemark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp" />
 
-                <ImageView
-                    android:id="@+id/imageView2"
-                    style="@style/App.ImageView"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/mylogo" />
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp" />
 
-                <TextView
-                    android:id="@+id/tvAmount"
-                    style="@style/Info.Text"
-                    android:layout_marginTop="12dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-
-
-                <TextView
-                    android:id="@+id/tvCurrency"
-                    style="@style/Info.Text"
-                    android:layout_marginTop="6dp"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                <TextView
-                    android:id="@+id/tvCategory"
-                    style="@style/Info.Text"
-                    android:layout_marginTop="6dp"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                <TextView
-                    android:id="@+id/tvRemark"
-                    style="@style/Info.Text"
-                    android:layout_marginTop="6dp"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                <TextView
-                    android:id="@+id/tvDate"
-                    style="@style/Info.Text"
-                    android:layout_marginTop="6dp"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                <Button
-                    android:id="@+id/btnAddNew"
-                    style="@style/App.Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="200dp"
-                    android:layout_marginTop="16dp"
-                    android:backgroundTint="#0D47A1"
-                    android:textColor="#FFFFFF"
-                    android:text="@string/add_new_expense" />
-
-                <Button
-                    android:id="@+id/btnBackHome"
-                    style="@style/App.Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="200dp"
-                    android:layout_marginTop="12dp"
-                    android:backgroundTint="#0D47A1"
-                    android:textColor="#FFFFFF"
-                    android:text="@string/back_to_home" />
-            </LinearLayout>
-        </ScrollView>
-    </androidx.cardview.widget.CardView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
