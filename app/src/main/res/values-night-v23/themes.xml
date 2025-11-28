@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Style for API 23+ Dark theme -->
+    <style name="Theme.LabMAD" parent="Base.Theme.LabMAD">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>
