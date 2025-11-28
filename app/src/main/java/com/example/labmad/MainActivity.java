@@ -1,6 +1,7 @@
 package com.example.labmad;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -10,22 +11,24 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String EXTRA_EXPENSE = "extra_expense";
-    private List<Expense> allExpenses;
+    private List<Expense> allExpenses = new ArrayList<>();
 
     public List<Expense> getAllExpenses() {
-        if (allExpenses == null) {
-            allExpenses = ExpenseStorage.loadList(this);
-        }
         return allExpenses;
     }
 
     public Expense getLatestExpense() {
-        if (allExpenses == null || allExpenses.isEmpty()) {
+        if (allExpenses.isEmpty()) {
             return null;
         }
         return allExpenses.get(0);
@@ -36,16 +39,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize with sample data if storage is empty
-        ExpenseStorage.initializeWithSampleData(this);
-        allExpenses = ExpenseStorage.loadList(this);
+        fetchExpenses();
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
         FragmentManager fm = getSupportFragmentManager();
 
         if (fm.findFragmentById(R.id.nav_host) == null) {
             fm.beginTransaction()
-                    .replace(R.id.nav_host, createHomeFragment(getLatestExpense()))
+                    .replace(R.id.nav_host, createHomeFragment(null))
                     .commit();
         }
 
@@ -68,17 +69,49 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void addExpense(Expense expense) {
-        ExpenseStorage.addExpense(this, expense);
-        allExpenses = ExpenseStorage.loadList(this);
-        showHomeFragmentWithExpense(expense);
-        Toast.makeText(this, "Expense added", Toast.LENGTH_SHORT).show();
+    private void fetchExpenses() {
+        ExpenseStorage.getApiService().getExpenses().enqueue(new Callback<List<Expense>>() {
+            @Override
+            public void onResponse(Call<List<Expense>> call, Response<List<Expense>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    allExpenses = response.body();
+                    showHomeFragmentWithExpense(getLatestExpense());
+                } else {
+                    Toast.makeText(MainActivity.this, "Failed to fetch expenses", Toast.LENGTH_SHORT).show();
+                }
+            }
 
-        // Notify ExpenseListFragment if visible
-        Fragment current = getSupportFragmentManager().findFragmentById(R.id.nav_host);
-        if (current instanceof ExpenseListFragment) {
-            ((ExpenseListFragment) current).refreshList(allExpenses);
-        }
+            @Override
+            public void onFailure(Call<List<Expense>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
+            }
+        });
+    }
+
+    public void addExpense(ExpensePayload payload) {
+        ExpenseStorage.getApiService().addExpense(payload).enqueue(new Callback<Expense>() {
+            @Override
+            public void onResponse(Call<Expense> call, Response<Expense> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    allExpenses.add(0, response.body());
+                    showHomeFragmentWithExpense(response.body());
+                    Toast.makeText(MainActivity.this, "Expense added", Toast.LENGTH_SHORT).show();
+                    Fragment current = getSupportFragmentManager().findFragmentById(R.id.nav_host);
+                    if (current instanceof ExpenseListFragment) {
+                        ((ExpenseListFragment) current).refreshList(allExpenses);
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "Failed to add expense", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Expense> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
+            }
+        });
     }
 
     public void navigateToAddExpense() {

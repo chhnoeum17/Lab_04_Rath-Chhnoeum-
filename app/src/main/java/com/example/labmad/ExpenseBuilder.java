@@ -1,14 +1,18 @@
 package com.example.labmad;
 
-import android.os.Parcel;
-
 public class ExpenseBuilder {
-    private int id;
+    private String id;
     private double amount;
     private String currency;
     private String category;
     private String remark;
+    private String createdBy;
     private String createdDate;
+
+    public ExpenseBuilder setId(String id) {
+        this.id = id;
+        return this;
+    }
 
     public ExpenseBuilder setAmount(double amount) {
         this.amount = amount;
@@ -30,29 +34,17 @@ public class ExpenseBuilder {
         return this;
     }
 
+    public ExpenseBuilder setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+        return this;
+    }
+
     public ExpenseBuilder setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
         return this;
     }
 
-    public ExpenseBuilder setId(int id) {
-        this.id = id;
-        return this;
-    }
-
-    public ExpenseBuilder setIn(Parcel in) {
-        id = in.readInt();
-        amount = in.readDouble();
-        currency = in.readString();
-        category = in.readString();
-        remark = in.readString();
-        createdDate = in.readString();
-        return this;
-    }
-
     public Expense createExpense() {
-        Expense expense = new Expense(String.valueOf(amount), currency, category, remark, createdDate);
-        expense.id = this.id;
-        return expense;
+        return new Expense(id, amount, currency, category, remark, createdBy, createdDate);
     }
 }

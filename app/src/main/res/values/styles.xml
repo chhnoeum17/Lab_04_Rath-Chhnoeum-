@@ -1,55 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="App" />
-    <style name="Info" />
-    <style name="App.CardView">
-        <item name="android:layout_width">wrap_content</item>
+
+    <!-- Main App CardView Style -->
+    <!-- Use MaterialComponents CardView style as parent -->
+    <style name="App.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">16dp</item>
-        <item name="cardCornerRadius">16dp</item>
-        <item name="cardUseCompatPadding">true</item>
-        <item name="cardBackgroundColor">@color/card_bg</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">8dp</item>
     </style>
 
+    <!-- General purpose ImageView -->
     <style name="App.ImageView">
         <item name="android:layout_width">120dp</item>
         <item name="android:layout_height">120dp</item>
         <item name="android:layout_marginBottom">16dp</item>
     </style>
 
-    <style name="App.Button" parent="Widget.Material3.Button">
-        <item name="android:layout_width">wrap_content</item>
+    <!-- Main App Button Style -->
+    <!-- Use MaterialComponents Button as parent -->
+    <style name="App.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:minWidth">200dp</item>
-        <item name="android:minHeight">48dp</item>
-        <item name="backgroundTint">@color/primary_600</item>
+        <item name="android:layout_marginTop">24dp</item>
+
+        <!-- For MaterialButton, better to use non-android namespace -->
+        <item name="backgroundTint">@color/primary</item>
         <item name="android:textColor">@color/on_primary</item>
     </style>
 
-    <style name="Info.Title">
-        <item name="android:textSize">20sp</item>
+    <!-- Title TextView for Info Screens -->
+    <!-- Use a TextAppearance as parent, not Widget.Material3.TextView -->
+    <style name="Info.Title" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_primary</item>
-        <item name="android:layout_marginTop">8dp</item>
     </style>
 
-    <style name="Info.Text">
+    <!-- Regular TextView for Info Screens -->
+    <style name="Info.Text" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/text_primary</item>
-        <item name="android:layout_marginTop">6dp</item>
     </style>
 
-    <style name="App.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+    <!-- Main App TextInputLayout -->
+    <!-- Use MaterialComponents TextInputLayout style -->
+    <style name="App.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">12dp</item>
         <item name="boxStrokeColor">@color/stroke</item>
     </style>
 
-    <style name="Form.Spinner" parent="Widget.AppCompat.Spinner.Underlined">
+    <!-- Main App Spinner Style -->
+    <!-- Material doesn't have a Material3 Spinner style, use AppCompat -->
+    <style name="Form.Spinner" parent="Widget.AppCompat.Spinner">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">48dp</item>
-        <item name="android:minHeight">48dp</item>
-        <item name="android:paddingStart">8dp</item>
-        <item name="android:paddingEnd">8dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">12dp</item>
     </style>
+
 </resources>

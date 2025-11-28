@@ -31,14 +31,7 @@ public class ExpenseDetailActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            try {
-                double amountValue = Double.parseDouble(expense.amount);
-                tvAmount.setText(currencyFormatter.format(amountValue));
-            } catch (NumberFormatException e) {
-                tvAmount.setText(R.string.invalid_amount_error);
-                e.printStackTrace();
-            }
-
+            tvAmount.setText(currencyFormatter.format(expense.amount));
             tvCategory.setText(getString(R.string.category_format, expense.category));
             tvRemark.setText(expense.remark);
             tvDate.setText(getString(R.string.date_format, expense.createdDate));

@@ -42,7 +42,6 @@ public class AddExpenseFragment extends Fragment {
         spCategory = view.findViewById(R.id.spinnerCategory);
         Button btnAddExpense = view.findViewById(R.id.btnAddExpense);
 
-        // Set up spinners
         ArrayAdapter<CharSequence> currencyAdapter = ArrayAdapter.createFromResource(requireContext(),
                 R.array.currencies, android.R.layout.simple_spinner_item);
         currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -53,7 +52,6 @@ public class AddExpenseFragment extends Fragment {
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spCategory.setAdapter(categoryAdapter);
 
-        // Set up Date Picker
         DatePickerDialog.OnDateSetListener dateSetListener = (v, year, month, day) -> {
             myCalendar.set(Calendar.YEAR, year);
             myCalendar.set(Calendar.MONTH, month);
@@ -64,23 +62,27 @@ public class AddExpenseFragment extends Fragment {
         etDate.setOnClickListener(v -> new DatePickerDialog(requireContext(), dateSetListener,
                 myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show());
 
-        // Set up button click listener
         btnAddExpense.setOnClickListener(v -> saveExpense());
 
         return view;
     }
 
     private void saveExpense() {
-        String amount = etAmount.getText().toString().trim();
-        String date = etDate.getText().toString().trim();
+        String amountStr = etAmount.getText().toString().trim();
         String remark = etRemark.getText().toString().trim();
 
-        // Clear previous errors
         tilAmount.setError(null);
-        tilDate.setError(null);
 
-        if (amount.isEmpty()) {
+        if (amountStr.isEmpty()) {
             tilAmount.setError(getString(R.string.amount_error));
+            return;
+        }
+
+        double amount;
+        try {
+            amount = Double.parseDouble(amountStr);
+        } catch (NumberFormatException e) {
+            tilAmount.setError(getString(R.string.invalid_amount_error));
             return;
         }
 
@@ -94,17 +96,14 @@ public class AddExpenseFragment extends Fragment {
             return;
         }
 
-        if (date.isEmpty()) {
-            tilDate.setError(getString(R.string.date_error));
-            return;
-        }
-
         String currency = spCurrency.getSelectedItem().toString();
         String category = spCategory.getSelectedItem().toString();
+        // You should replace "user_id" with the actual ID of the logged-in user
+        String createdBy = "user_id"; 
 
         MainActivity mainActivity = (MainActivity) getActivity();
         if (mainActivity != null) {
-            mainActivity.addExpense(new Expense(amount, currency, category, remark, date));
+            mainActivity.addExpense(new ExpensePayload(amount, currency, category, remark, createdBy));
         }
     }
 

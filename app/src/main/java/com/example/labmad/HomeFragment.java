@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.text.NumberFormat;
 import java.util.Currency;
 
@@ -34,38 +36,40 @@ public class HomeFragment extends Fragment {
         tvLastExpense = view.findViewById(R.id.tvLastExpense);
         Button btnAddNew = view.findViewById(R.id.btnAddNew);
         btnViewDetail = view.findViewById(R.id.btnViewDetail);
+        Button btnLogout = view.findViewById(R.id.btnLogout);
 
-        // Wire Add button to ask the activity to navigate to the AddExpenseFragment
         btnAddNew.setOnClickListener(v -> {
             if (getActivity() instanceof MainActivity) {
                 ((MainActivity) getActivity()).navigateToAddExpense();
             }
         });
 
-        // View detail opens the ExpenseDetailActivity with the latest expense (if exists)
         btnViewDetail.setOnClickListener(v -> {
-            Expense e = null;
             if (getActivity() instanceof MainActivity) {
-                e = ((MainActivity) getActivity()).getLatestExpense();
-            }
-            if (e != null) {
-                Intent intent = new Intent(requireContext(), ExpenseDetailActivity.class);
-                intent.putExtra(MainActivity.EXTRA_EXPENSE, (Parcelable) e);
-                startActivity(intent);
+                Expense e = ((MainActivity) getActivity()).getLatestExpense();
+                if (e != null) {
+                    Intent intent = new Intent(requireContext(), ExpenseDetailActivity.class);
+                    intent.putExtra(MainActivity.EXTRA_EXPENSE, (Parcelable) e);
+                    startActivity(intent);
+                }
             }
         });
 
-        // If the fragment was created with an expense argument, show it
+        btnLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(requireContext(), LoginActivity.class);
+            startActivity(intent);
+            if (getActivity() != null) {
+                getActivity().finish();
+            }
+        });
+
         Bundle args = getArguments();
         if (args != null && args.containsKey("latest_expense")) {
             Expense e = args.getParcelable("latest_expense");
             showExpense(e);
         } else {
-            // Or read from activity if available
-            if (getActivity() instanceof MainActivity) {
-                Expense a = ((MainActivity) getActivity()).getLatestExpense();
-                showExpense(a);
-            }
+            showExpense(null);
         }
     }
 
@@ -79,17 +83,13 @@ public class HomeFragment extends Fragment {
 
         NumberFormat nf = NumberFormat.getCurrencyInstance();
         try {
-            nf.setCurrency(Currency.getInstance(e.currency));
+            if (e.currency != null) {
+                nf.setCurrency(Currency.getInstance(e.currency));
+            }
         } catch (Exception ignore) { }
 
-        try {
-            double amountValue = Double.parseDouble(e.amount);
-            String formatted = nf.format(amountValue);
-            tvLastExpense.setText(getString(R.string.last_expense_message, formatted));
-        } catch (NumberFormatException ex) {
-            tvLastExpense.setText(getString(R.string.invalid_amount_error));
-        }
-        
+        String formatted = nf.format(e.amount);
+        tvLastExpense.setText(getString(R.string.last_expense_message, formatted));
         btnViewDetail.setEnabled(true);
     }
 }

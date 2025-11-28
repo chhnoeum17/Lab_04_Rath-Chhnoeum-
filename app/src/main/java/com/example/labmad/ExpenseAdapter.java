@@ -50,13 +50,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             if (e.currency != null) formatter.setCurrency(Currency.getInstance(e.currency));
         } catch (Exception ignored) {}
 
-        try {
-            double amountValue = Double.parseDouble(e.amount);
-            holder.tvAmount.setText(formatter.format(amountValue));
-        } catch (NumberFormatException ex) {
-            holder.tvAmount.setText(holder.itemView.getContext().getString(R.string.invalid_amount_error));
-        }
-        
+        holder.tvAmount.setText(formatter.format(e.amount));
         holder.tvCategory.setText(holder.itemView.getContext().getString(R.string.category_format, safeString(e.category)));
         holder.tvDate.setText(holder.itemView.getContext().getString(R.string.date_format, safeString(e.createdDate)));
 

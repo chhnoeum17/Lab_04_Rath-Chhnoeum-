@@ -29,7 +29,6 @@ public class ExpenseListFragment extends Fragment implements ExpenseAdapter.OnIt
         recyclerExpenses = view.findViewById(R.id.recyclerExpenses);
         recyclerExpenses.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Initialize with an empty list, it will be updated in onResume
         adapter = new ExpenseAdapter(Collections.emptyList(), this);
         recyclerExpenses.setAdapter(adapter);
 
@@ -39,7 +38,6 @@ public class ExpenseListFragment extends Fragment implements ExpenseAdapter.OnIt
     @Override
     public void onResume() {
         super.onResume();
-        // Refresh the list every time the fragment is shown
         MainActivity mainActivity = (MainActivity) getActivity();
         if (mainActivity != null) {
             refreshList(mainActivity.getAllExpenses());
